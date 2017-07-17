@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'LPImageGridView/*'
   s.dependency 'SDWebImage', '~> 4'
+  s.dependency 'SDWebImage/GIF', '~> 4'
   s.dependency 'Masonry'
   s.frameworks = 'Foundation', 'UIKit'
 end

@@ -24,6 +24,7 @@
 #import "Masonry.h"
 #import "FLAnimatedImageView.h"
 #import "UIImageView+WebCache.h"
+#import "LPImageGridView.h"
 
 @interface UIImage (MyBundle)
 
@@ -48,10 +49,18 @@
 
 + (UIImage *)imageNamedFromMyBundle:(NSString *)imageName
 {
-    NSBundle *bundle = [NSBundle bundleForClass:[LPImageGridView class]];
-    NSURL *bundleUrl = [bundle URLForResource:@"LPImageGridView" withExtension:@"bundle"];
-    NSBundle *defaultBundle = [NSBundle bundleWithURL:bundleUrl];
-    return [UIImage imageWithContentsOfFile:[defaultBundle pathForResource:imageName ofType:"png"]];
+    UIImage *image = [UIImage imageNamed:[@"LPImageGridView.bundle" stringByAppendingPathComponent:imageName]];
+    if (image) {
+        return image;
+    } else {
+        NSBundle *bundle        = [NSBundle bundleForClass:[LPImageGridView class]];
+        NSURL *bundleUrl        = [bundle URLForResource:NSStringFromClass([LPImageGridView class]) withExtension:@"bundle"];
+        if (bundleUrl) {
+            NSBundle *defaultBundle = [NSBundle bundleWithURL:bundleUrl];
+            return [UIImage imageWithContentsOfFile:[defaultBundle pathForResource:imageName ofType:@"png"]];
+        }
+        return nil;
+    }
 }
 
 - (UIImage *)imageMaskedWithColor:(UIColor *)maskColor
@@ -160,7 +169,7 @@
     [self configThemeWithColor:nil];
     self.checkBtn.hidden = YES;
     [self.contentView addSubview:self.checkBtn];
-
+    
     [self.checkBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(2);
         make.trailing.equalTo(self.contentView).offset(-2);

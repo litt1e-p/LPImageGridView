@@ -33,17 +33,25 @@
 
 @implementation UIImage (MyBundle)
 
-+ (UIImage *)imageNamedFromMyBundle:(NSString *)name {
-    UIImage *image = [UIImage imageNamed:[@"LPImageGridView.bundle" stringByAppendingPathComponent:name]];
-    if (image) {
-        return image;
-    } else {
-        image = [UIImage imageNamed:[@"Frameworks/LPImageGridView.framework/LPImageGridView.bundle" stringByAppendingPathComponent:name]];
-        if (!image) {
-            image = [UIImage imageNamed:name];
-        }
-        return image;
-    }
+//+ (UIImage *)imageNamedFromMyBundle:(NSString *)name {
+//    UIImage *image = [UIImage imageNamed:[@"LPImageGridView.bundle" stringByAppendingPathComponent:name]];
+//    if (image) {
+//        return image;
+//    } else {
+//        image = [UIImage imageNamed:[@"Frameworks/LPImageGridView.framework/LPImageGridView.bundle" stringByAppendingPathComponent:name]];
+//        if (!image) {
+//            image = [UIImage imageNamed:name];
+//        }
+//        return image;
+//    }
+//}
+
++ (UIImage *)imageNamedFromMyBundle:(NSString *)imageName
+{
+    NSBundle *bundle = [NSBundle bundleForClass:[LPImageGridView class]];
+    NSURL *bundleUrl = [bundle URLForResource:@"LPImageGridView" withExtension:@"bundle"];
+    NSBundle *defaultBundle = [NSBundle bundleWithURL:bundleUrl];
+    return [UIImage imageWithContentsOfFile:[defaultBundle pathForResource:imageName ofType:"png"]];
 }
 
 - (UIImage *)imageMaskedWithColor:(UIColor *)maskColor
@@ -129,8 +137,8 @@
 
 - (void)configThemeWithColor:(UIColor *)color
 {
-    UIImage *defaultImg  = [UIImage imageNamedFromMyBundle:@"select_default"];
-    UIImage *selectedImg = [UIImage imageNamedFromMyBundle:@"select_selected"];
+    UIImage *defaultImg  = [UIImage imageNamedFromMyBundle:@"select_default@2x"];
+    UIImage *selectedImg = [UIImage imageNamedFromMyBundle:@"select_selected@2x"];
     if (color) {
         selectedImg = [defaultImg imageMaskedWithColor:color];
     }

@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.platform = :ios, '7.0'
   s.requires_arc = true
   s.source_files = 'LPImageGridView/*'
+  s.resources  = "LPImageGridView/*.bundle"
   s.dependency 'SDWebImage', '~> 4'
   s.dependency 'SDWebImage/GIF', '~> 4'
   s.dependency 'Masonry'

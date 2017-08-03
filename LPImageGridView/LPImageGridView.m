@@ -98,21 +98,21 @@ static NSString * const kLPImageGridViewCellID = @"kLPImageGridViewCellID";
     if (self.enableEditState) {
         [self respondsToDelegate];
     } else {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectedImageWithIndex:)]) {
-            [self.delegate didSelectedImageWithIndex:indexPath.item];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(imageGridView:didSelectedImageWithIndex:)]) {
+            [self.delegate imageGridView:self didSelectedImageWithIndex:indexPath.item];
         }
     }
 }
 
 - (void)respondsToDelegate
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(didPickedImagesWithIndexes:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(imageGridView:didPickedImagesWithIndexes:)]) {
         NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
         NSMutableArray *indexes = [NSMutableArray array];
         for (NSIndexPath *idx in indexPaths) {
             [indexes addObject:@(idx.item)];
         }
-        [self.delegate didPickedImagesWithIndexes:indexes];
+        [self.delegate imageGridView:self didPickedImagesWithIndexes:indexes];
     }
 }
 

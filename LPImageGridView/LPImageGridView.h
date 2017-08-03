@@ -21,12 +21,13 @@
 // SOFTWARE.
 
 #import <UIKit/UIKit.h>
+@class LPImageGridView;
 
 @protocol LPImageGridViewDelegate <NSObject>
 
 @optional
-- (void)didPickedImagesWithIndexes:(NSArray *)indexes;
-- (void)didSelectedImageWithIndex:(NSInteger)index;
+- (void)imageGridView:(LPImageGridView *)imageGridView didPickedImagesWithIndexes:(NSArray *)indexes;
+- (void)imageGridView:(LPImageGridView *)imageGridView didSelectedImageWithIndex:(NSInteger)index;
 
 @end
 

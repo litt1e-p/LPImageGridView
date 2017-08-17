@@ -73,9 +73,11 @@ static NSString * const kLPImageGridViewCellID = @"kLPImageGridViewCellID";
     cell.enableEditState      = self.enableEditState;
     cell.btnTintColor         = self.btnTintColor;
     if ([self.images[indexPath.item] isKindOfClass:[NSString class]]) {
-        [cell assignCellWithImageUrl:self.images[indexPath.item]];
+        [cell assignCellWithImageUrlStr:self.images[indexPath.item]];
     } else if ([self.images[indexPath.item] isKindOfClass:[UIImage class]]) {
         [cell assignCellWithImage:self.images[indexPath.item]];
+    } else if ([self.images[indexPath.item] isKindOfClass:[NSURL class]]) {
+        [cell assignCellWithImageUrl:self.images[indexPath.item]];
     }
     return cell;
 }

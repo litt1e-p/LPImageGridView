@@ -26,7 +26,8 @@
 
 @property (nonatomic, assign) BOOL enableEditState;
 @property (nonatomic, strong) UIColor *btnTintColor;
-- (void)assignCellWithImageUrl:(NSString *)imageUrl;
+- (void)assignCellWithImageUrlStr:(NSString *)imageUrlStr;
+- (void)assignCellWithImageUrl:(NSURL *)imageUrl;
 - (void)assignCellWithImage:(UIImage *)image;
 
 @end

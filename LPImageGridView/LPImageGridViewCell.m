@@ -122,9 +122,14 @@
     [self configThemeWithColor:btnTintColor];
 }
 
-- (void)assignCellWithImageUrl:(NSString *)imageUrl
+- (void)assignCellWithImageUrlStr:(NSString *)imageUrlStr
 {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self assignCellWithImageUrl:[NSURL URLWithString:imageUrlStr]];
+}
+
+- (void)assignCellWithImageUrl:(NSURL *)imageUrl
+{
+    [self.imageView sd_setImageWithURL:imageUrl placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (cacheType == SDImageCacheTypeNone) {
             self.imageView.alpha = 0;
             [UIView animateWithDuration:0.25 animations:^{
@@ -133,7 +138,7 @@
         } else {
             self.imageView.alpha = 1;
         }
-        if ([imageUrl hasSuffix:@".gif"]) {
+        if ([imageUrl.absoluteString hasSuffix:@".gif"]) {
             [self.imageView startAnimating];
         }
     }];

@@ -27,7 +27,6 @@
 
 @property (nonatomic, strong) NSMutableArray *attrs;
 @property (nonatomic, assign) CGFloat contentY;
-@property (nonatomic, assign) CGSize newBoundsSize;
 @end
 
 @implementation LPImageGridLayout
@@ -77,7 +76,6 @@ static CGFloat const kItemsMargin = 1;
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
 {
-    
     UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:elementKind withIndexPath:indexPath];
     CGSize size = [self evaluateSupplementaryElementSizeForKind:elementKind AtIndexPath:indexPath];
     attr.frame = CGRectMake(0, _contentY, size.width, size.height);
@@ -123,11 +121,11 @@ static CGFloat const kItemsMargin = 1;
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
-    if (CGSizeEqualToSize(newBounds.size, _newBoundsSize)) {
-        return NO;
+    CGRect oldBounds = self.collectionView.bounds;
+    if (CGRectGetWidth(newBounds) != CGRectGetWidth(oldBounds)) {
+        return YES;
     }
-    _newBoundsSize = newBounds.size;
-    return YES;
+    return NO;
 }
 
 - (NSMutableArray *)attrs

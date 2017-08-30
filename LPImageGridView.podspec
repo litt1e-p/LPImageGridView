@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "LPImageGridView"
-  s.version      = "0.0.5"
+  s.version      = "0.0.6"
   s.summary      = "show images with grid view"
   s.description  = <<-DESC
                    show images with grid view which is based on flexiable UICollectionView with a fully customizable flowlayout

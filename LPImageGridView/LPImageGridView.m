@@ -130,7 +130,16 @@ static NSString * const kLPImageGridViewCellID = @"kLPImageGridViewCellID";
         [self respondsToDelegate];
     } else {
         if (self.delegate && [self.delegate respondsToSelector:@selector(imageGridView:didSelectedImageWithIndex:)]) {
-            [self.delegate imageGridView:self didSelectedImageWithIndex:indexPath.item];
+            if (self.removeDiskCacheWhenSelectImage) {
+                __weak typeof(self) weakSelf = self;
+                [[YYWebImageManager sharedManager].cache.diskCache removeAllObjectsWithBlock:^{
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        [weakSelf.delegate imageGridView:weakSelf didSelectedImageWithIndex:indexPath.item];
+                    });
+                }];
+            } else {
+                [self.delegate imageGridView:self didSelectedImageWithIndex:indexPath.item];
+            }
         }
     }
 }

@@ -141,7 +141,7 @@
                              }
                             completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
                                  if (from == YYWebImageFromDiskCache) {
-                                     NSLog(@"load from disk cache");
+//                                     NSLog(@"load from disk cache");
                                  }
                             }];
 }

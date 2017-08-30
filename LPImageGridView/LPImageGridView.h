@@ -36,6 +36,9 @@
 @property (nonatomic, strong) UIColor *btnTintColor;
 @property (nonatomic, assign) BOOL enableEditState;
 @property (nonatomic, strong) NSArray *images;
+@property (nonatomic, assign) BOOL removeDiskCacheWhenSelectImage;
 @property (nonatomic, weak) id <LPImageGridViewDelegate>delegate;
+
 - (instancetype)initWithImages:(NSArray *)images;
+
 @end

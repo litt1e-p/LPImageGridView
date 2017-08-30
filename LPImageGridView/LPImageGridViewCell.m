@@ -22,9 +22,8 @@
 
 #import "LPImageGridViewCell.h"
 #import "Masonry.h"
-#import "FLAnimatedImageView.h"
-#import "UIImageView+WebCache.h"
 #import "LPImageGridView.h"
+#import "YYWebImage.h"
 
 @interface UIImage (MyBundle)
 
@@ -87,7 +86,7 @@
 @interface LPImageGridViewCell()
 
 @property (nonatomic, strong) UIButton *checkBtn;
-@property (nonatomic, strong) FLAnimatedImageView *imageView;
+@property (nonatomic, strong) UIImageView *imageView;
 
 @end
 
@@ -122,6 +121,11 @@
     [self configThemeWithColor:btnTintColor];
 }
 
+- (void)cancelImageLoad
+{
+    [self.imageView yy_cancelCurrentImageRequest];
+}
+
 - (void)assignCellWithImageUrlStr:(NSString *)imageUrlStr
 {
     [self assignCellWithImageUrl:[NSURL URLWithString:imageUrlStr]];
@@ -129,19 +133,17 @@
 
 - (void)assignCellWithImageUrl:(NSURL *)imageUrl
 {
-    [self.imageView sd_setImageWithURL:imageUrl placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-        if (cacheType == SDImageCacheTypeNone) {
-            self.imageView.alpha = 0;
-            [UIView animateWithDuration:0.25 animations:^{
-                self.imageView.alpha = 1;
-            }];
-        } else {
-            self.imageView.alpha = 1;
-        }
-        if ([imageUrl.absoluteString hasSuffix:@".gif"]) {
-            [self.imageView startAnimating];
-        }
-    }];
+    [self.imageView yy_setImageWithURL:imageUrl
+                           placeholder:nil options:YYWebImageOptionSetImageWithFadeAnimation
+                              progress:nil
+                             transform:^UIImage *(UIImage *image, NSURL *url) {
+                                 return [image yy_imageByResizeToSize:CGSizeMake(100, 100) contentMode:UIViewContentModeScaleAspectFill];
+                             }
+                            completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
+                                 if (from == YYWebImageFromDiskCache) {
+                                     NSLog(@"load from disk cache");
+                                 }
+                            }];
 }
 
 - (void)assignCellWithImage:(UIImage *)image
@@ -165,7 +167,7 @@
     self.contentView.layer.borderColor = [UIColor colorWithRed:227/255.f green:227/255.f blue:227/255.f alpha:1.f].CGColor;
     self.contentView.layer.borderWidth = 0.5f;
     
-    self.imageView               = [[FLAnimatedImageView alloc] init];
+    self.imageView               = [[YYAnimatedImageView alloc] init];
     self.imageView.contentMode   = UIViewContentModeScaleAspectFill;
     self.imageView.clipsToBounds = YES;
     [self.contentView addSubview:self.imageView];

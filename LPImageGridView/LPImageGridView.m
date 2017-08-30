@@ -23,6 +23,7 @@
 #import "LPImageGridView.h"
 #import "LPImageGridLayout.h"
 #import "LPImageGridViewCell.h"
+#import "YYWebImage.h"
 
 @interface LPImageGridView ()<UICollectionViewDelegate, UICollectionViewDataSource, LPCollectionViewItemSizeLayoutDelegate>
 
@@ -51,6 +52,23 @@ static NSString * const kLPImageGridViewCellID = @"kLPImageGridViewCellID";
     [self initViews];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self clearImageCache];
+}
+
+-(void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [self clearImageCache];
+}
+
+-(void)clearImageCache
+{
+    [[YYWebImageManager sharedManager].cache.memoryCache removeAllObjects];
+}
+
 - (void)initViews
 {
     [self.view addSubview:self.collectionView];
@@ -67,18 +85,29 @@ static NSString * const kLPImageGridViewCellID = @"kLPImageGridViewCellID";
     return self.images.count;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    LPImageGridViewCell *gCell = (LPImageGridViewCell *)cell;
+    if ([self.images[indexPath.item] isKindOfClass:[NSString class]]) {
+        [gCell assignCellWithImageUrlStr:self.images[indexPath.item]];
+    } else if ([self.images[indexPath.item] isKindOfClass:[UIImage class]]) {
+        [gCell assignCellWithImage:self.images[indexPath.item]];
+    } else if ([self.images[indexPath.item] isKindOfClass:[NSURL class]]) {
+        [gCell assignCellWithImageUrl:self.images[indexPath.item]];
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    LPImageGridViewCell *gCell = (LPImageGridViewCell *)cell;
+    [gCell cancelImageLoad];
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LPImageGridViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kLPImageGridViewCellID forIndexPath:indexPath];
     cell.enableEditState      = self.enableEditState;
     cell.btnTintColor         = self.btnTintColor;
-    if ([self.images[indexPath.item] isKindOfClass:[NSString class]]) {
-        [cell assignCellWithImageUrlStr:self.images[indexPath.item]];
-    } else if ([self.images[indexPath.item] isKindOfClass:[UIImage class]]) {
-        [cell assignCellWithImage:self.images[indexPath.item]];
-    } else if ([self.images[indexPath.item] isKindOfClass:[NSURL class]]) {
-        [cell assignCellWithImageUrl:self.images[indexPath.item]];
-    }
     return cell;
 }
 

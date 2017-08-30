@@ -29,5 +29,6 @@
 - (void)assignCellWithImageUrlStr:(NSString *)imageUrlStr;
 - (void)assignCellWithImageUrl:(NSURL *)imageUrl;
 - (void)assignCellWithImage:(UIImage *)image;
+- (void)cancelImageLoad;
 
 @end

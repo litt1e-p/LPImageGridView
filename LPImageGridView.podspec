@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "LPImageGridView"
-  s.version      = "0.0.4"
+  s.version      = "0.0.5"
   s.summary      = "show images with grid view"
   s.description  = <<-DESC
                    show images with grid view which is based on flexiable UICollectionView with a fully customizable flowlayout
@@ -14,8 +14,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'LPImageGridView/*'
   s.resources  = "LPImageGridView/*.bundle"
-  s.dependency 'SDWebImage', '~> 4'
-  s.dependency 'SDWebImage/GIF', '~> 4'
+  s.dependency 'YYWebImage'
   s.dependency 'Masonry'
   s.frameworks = 'Foundation', 'UIKit'
 end
